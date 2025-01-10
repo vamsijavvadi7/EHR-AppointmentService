@@ -1,6 +1,7 @@
 package com.ehr.appointmentservice.mapper;
 
 import com.ehr.appointmentservice.dto.AppointmentDto;
+import com.ehr.appointmentservice.dto.AppointmentDto2;
 import com.ehr.appointmentservice.dto.VisitInfoDto;
 import com.ehr.appointmentservice.model.Appointment;
 import com.ehr.appointmentservice.model.VisitInfo;
@@ -24,5 +25,7 @@ public interface AppointmentMapper {
     // Mapping VisitInfoDto to VisitInfo entity
     @Mapping(target = "appointment", ignore = true) // Prevent circular reference
     VisitInfo toVisitInfoEntity(VisitInfoDto visitInfoDto);
+
+    AppointmentDto2 toAppointmentDto2(AppointmentDto appointmentDto);
 }
 

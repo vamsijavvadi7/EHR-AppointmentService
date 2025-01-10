@@ -1,12 +1,9 @@
 package com.ehr.appointmentservice.service;
 
 import com.ehr.appointmentservice.dao.AppointmentRepository;
-import com.ehr.appointmentservice.dto.AppointmentDto;
-import com.ehr.appointmentservice.dto.VisitInfoDto;
+import com.ehr.appointmentservice.dto.*;
 import com.ehr.appointmentservice.feign.PatientClient;
 import com.ehr.appointmentservice.feign.DoctorClient;
-import com.ehr.appointmentservice.dto.PatientDto;
-import com.ehr.appointmentservice.dto.DoctorDto;
 import com.ehr.appointmentservice.mapper.AppointmentMapper;
 import com.ehr.appointmentservice.model.Appointment;
 import com.ehr.appointmentservice.model.VisitInfo;
@@ -16,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,6 +51,7 @@ public class AppointmentService {
         // Validate doctor
         try {
             DoctorDto doctor = doctorClient.getDoctorById(appointmentDto.getDoctorId());
+
             if (doctor == null) {
                 return new ResponseEntity<>("Doctor not found", HttpStatus.NOT_FOUND);
             }
@@ -66,7 +65,12 @@ public class AppointmentService {
         AppointmentDto savedAppointmentDto = appointmentMapper.toDto(appointmentRepository.save(appointment));
 
         savedAppointmentDto.getVisitInfo().setAppointmentId(savedAppointmentDto.getId());
-        appointmentProducer.notifyDoctor(savedAppointmentDto);
+
+        AppointmentDto2 appointmentDto2= appointmentMapper.toAppointmentDto2(savedAppointmentDto);
+
+        appointmentDto2.setPatient(patientClient.getPatientById(appointmentDto2.getPatientId()));
+
+        appointmentProducer.notifyDoctor(appointmentDto2);
         return new ResponseEntity<>(savedAppointmentDto, HttpStatus.CREATED);
     }
 

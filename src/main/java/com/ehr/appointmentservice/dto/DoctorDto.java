@@ -13,6 +13,7 @@ public class DoctorDto {
     @NotBlank
     private String name;
 
+
     @NotBlank
     private String specialization;
 
