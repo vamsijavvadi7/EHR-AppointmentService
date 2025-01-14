@@ -20,6 +20,5 @@ public class AppointmentProducer {
 
     public void notifyDoctor(AppointmentDto2 message) {
         kafkaTemplate.send(TOPIC, message);
-        System.out.println("Appointment notification sent to Kafka: " + message);
     }
 }

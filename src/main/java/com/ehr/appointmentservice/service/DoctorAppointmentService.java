@@ -67,6 +67,7 @@ public class DoctorAppointmentService {
                 return appointmentDto;
                 })
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(appointmentDtos);
     }
 
